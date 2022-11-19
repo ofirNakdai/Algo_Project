@@ -9,18 +9,58 @@ using namespace std;
 
 Binumber::Binumber(const char* arrin, int lengthin)
 {
-	
-	arr.insert(arr.begin(), &arrin[0], &arrin[lengthin]);
-	arr.resize(lengthin);
+	arr.reserve(lengthin);
+	for(int i = lengthin-1; i>=0;i--)	
+		arr.push_back(arrin[i]);
+		
 	optimize();
 }
+Binumber::Binumber(Binumber& x)
+{
+	for (int i =0; i <  x.size(); i++)
+		arr.push_back(x.get_cell_bit(i) + '0');
+
+	optimize();
+}
+
+Binumber::Binumber(Binumber&& x)
+{
+	arr = x.arr;
+	/*for (int i =0; i <  x.size(); i++)
+		arr.push_back(x.get_cell_bit(i) + '0');
+
+	optimize();*/
+}
+
+
 void Binumber::set_arr(const char* arrin, int lengthin)
 {
-	
-	arr.insert(arr.begin(), &arrin[0], &arrin[lengthin]);
-	arr.resize(lengthin);
+	arr.reserve(lengthin);
+	for(int i = lengthin-1; i>=0;i--)	
+		arr.push_back(arrin[i]);
+		
 	optimize();
 }
+int Binumber::get_cell_bit(int cell)
+{
+	if (cell < this->arr.size()) {
+		if (this->arr[cell] == '1')
+			return 1;
+		else
+			return 0;
+	}
+
+	return -1;
+}
+void Binumber::set_cell_bit(int cell, char bit)
+{
+	if (cell < this->arr.size()) {
+		this->arr[cell] = bit;
+	}
+
+}
+
+
 void Binumber::add1()
 {
 	char flag = '1';
@@ -51,7 +91,7 @@ void Binumber::add1()
 
 		if (arr[i] == '1' && flag == '1')// last bit
 		{
-			arr[i] = 0;
+			arr[i] = '0';
 			arr.push_back('1');
 		}
 	}//else
