@@ -1,3 +1,8 @@
 ﻿  Main.cpp
-C:\Users\Ofir Nakdai\source\repos\Algo_Project\Main.cpp(23,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
-  Algo_Project.vcxproj -> C:\Users\Ofir Nakdai\source\repos\Algo_Project\Debug\Algo_Project.exe
+D:\Documents\MTA\אלגוריתמים\Algo_Project\Main.cpp(126,74): error C2664: 'Binumber algo2(Binumber &,Binumber &)': cannot convert argument 1 from 'Binumber' to 'Binumber &'
+D:\Documents\MTA\אלגוריתמים\Algo_Project\Main.cpp(126,40): message : A non-const reference may only be bound to an lvalue
+D:\Documents\MTA\אלגוריתמים\Algo_Project\Main.cpp(19,11): message : see declaration of 'algo2'
+D:\Documents\MTA\אלגוריתמים\Algo_Project\Main.cpp(128,57): error C2664: 'Binumber algo2(Binumber &,Binumber &)': cannot convert argument 1 from 'Binumber' to 'Binumber &'
+D:\Documents\MTA\אלגוריתמים\Algo_Project\Main.cpp(128,25): message : A non-const reference may only be bound to an lvalue
+D:\Documents\MTA\אלגוריתמים\Algo_Project\Main.cpp(19,11): message : see declaration of 'algo2'
+D:\Documents\MTA\אלגוריתמים\Algo_Project\Main.cpp(168,1): warning C4326: return type of 'main' should be 'int' instead of 'void'

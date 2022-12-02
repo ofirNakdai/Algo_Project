@@ -15,6 +15,13 @@ Binumber::Binumber(const char* arrin, int lengthin)
 		
 	optimize();
 }
+Binumber::Binumber(int size, char bit)
+{
+	this->arr.reserve(size);
+		for(int i=0; i<size; i++)
+		arr.push_back(bit);
+}
+
 Binumber::Binumber(Binumber& x)
 {
 	for (int i =0; i <  x.size(); i++)
@@ -59,8 +66,6 @@ void Binumber::set_cell_bit(int cell, char bit)
 	}
 
 }
-
-
 void Binumber::add1()
 {
 	char flag = '1';
@@ -131,6 +136,13 @@ void Binumber::resize(int newSize)
 {
 	arr.resize(newSize);
 }
+
+void Binumber::erase(int start, int end)
+{
+	arr.erase(arr.begin(), arr.begin() + end);
+}
+
+
 void Binumber::optimize()
 {//delete zero from the end 
 	int i = this->arr.size() - 1;
@@ -157,4 +169,17 @@ int Binumber::get_dec_val()
 			sum += pow(2, i);
 	}
 	return sum;
+}
+Binumber Binumber::shift_right(int len)
+{
+	this->resize(this->arr.size() + len);
+	int i;
+
+	for (i = this->arr.size()-1; i > 0; i--)
+		this->arr[i] = this->arr[i - len];
+
+	for (i = 0; i < len; i++)
+		this->arr[i] = '0';
+
+	return *this;
 }

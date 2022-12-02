@@ -110,23 +110,84 @@ Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 	return nCopy;
 }
 
- Binumber algo4(Binumber& m, Binumber& n)
+Binumber algo4(Binumber& m, Binumber& n, int m_size)
+{// m_size = m.size() -1
+	if (m_size == 1)
+	{
+		if (m.get_cell_bit(0) == 1)
+			return Binumber(n);
+		else
+			return Binumber(1, '0');
+	}
+
+	else
+	{ // i > 0
+		if (m.get_cell_bit(m_size - 1) == 1)
+		{
+			Binumber tmp(n);
+			tmp.shift_right(m_size - 1);
+			Binumber rec = algo4(m, n, m_size - 1);
+			return algo2(tmp, rec);
+		}
+			
+		else
+		{
+			Binumber tmp(1, '0');
+			Binumber rec = algo4(m, n, m_size - 1);
+			return algo2(tmp, rec);
+		}
+	}
+}
+
+ 
+ Binumber algo5_rec(Binumber& m, Binumber& n, int N)
  {
-	 // m 0011      n 1101
-	 
-	 Binumber res(0); // res 0000
-	 Binumber curr(n); // 1101
-	 for (int i = 0; i < m.size(); i++)
+	 if(N<=128)
 	 {
-		 if (m.get_cell_bit(i) == '1')
-			 algo2(curr, res);
-		 
-		 curr.shift_right(1);		 
+		return algo4(m, n, N);
 	 }
+	 Binumber n1(n);
+	 n1.erase(0, N / 2 + 1);	 
+	 Binumber n2(n);
+	 n2.resize(N / 2);
+	 Binumber m1(m);
+	 m1.erase(0, N / 2 + 1);
+	 Binumber m2(m);
+	 m2.resize(N / 2);
+
+	 Binumber n1m1 = algo5_rec(n1, m1, N / 2);
+	 Binumber n1m2 = algo5_rec(n1, m2, N / 2);
+	 Binumber n2m1 = algo5_rec(n2, m1, N / 2);
+	 Binumber n2m2 = algo5_rec(n2, m2, N / 2);
+
+	 n1m1.shift_right(N);
+	 Binumber n1m2_plus_n2m1 = algo2(n1m2, n2m1);
+	 n1m2_plus_n2m1.shift_right(N / 2);
+
+	 Binumber res = algo2(n1m1, n1m2_plus_n2m1);
+	 res.co(res, n2m2);
+
+
+
+
  }
 
 
 
+ Binumber algo5(Binumber& m, Binumber& n)
+ {
+	 if (m.size() != n.size() || n.size() % 2 != 0 || m.size() % 2 != 0)
+	 {
+		 cout << "invalid input for algo5";
+		 return NULL;
+	 }
+	 int N = m.size();
+	 algo5_rec(m, n, N);
+
+ }
+
+
+ 
 
 void main()
 {
