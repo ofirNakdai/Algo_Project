@@ -23,7 +23,10 @@ public:
 	Binumber(Binumber& x); // copy c'tor
 	Binumber(Binumber&& x); // move c'tor
 
+
+
 	void set_arr(const char* arrin, int lengthin);
+	void copy(Binumber& x);
 	int get_cell_bit(int cell);
 	void set_cell_bit(int cell, char bit);
 	

@@ -30,6 +30,14 @@ Binumber::Binumber(Binumber& x)
 	optimize();
 }
 
+void Binumber::copy(Binumber& x)
+{
+	for (int i = 0; i < x.size(); i++)
+		arr.push_back(x.get_cell_bit(i) + '0');
+
+	optimize();
+}
+
 Binumber::Binumber(Binumber&& x)
 {
 	arr = x.arr;

@@ -165,7 +165,8 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 	 n1m2_plus_n2m1.shift_right(N / 2);
 
 	 Binumber res = algo2(n1m1, n1m2_plus_n2m1);
-	 res.co(res, n2m2);
+	 Binumber test(algo2(res, n2m2));
+	 res.copy();
 
 
 
