@@ -37,6 +37,10 @@ Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 			res_num = 0;
 			flag = 1;
 			break;
+		case 3:
+			res_num = 1;
+			flag = 1;
+			break;
 		default:
 			break;
 		}
@@ -61,6 +65,10 @@ Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 			res_num = 0;
 			flag = 1;
 			break;
+		case 3:
+			res_num = 1;
+			flag = 1;
+			break;
 		default:
 			break;
 		}
@@ -80,6 +88,10 @@ Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 			break;
 		case 2:
 			res_num = 0;
+			flag = 1;
+			break;
+		case 3:
+			res_num = 1;
 			flag = 1;
 			break;
 		default:
@@ -127,14 +139,16 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 			Binumber tmp(n);
 			tmp.shift_right(m_size - 1);
 			Binumber rec = algo4(m, n, m_size - 1);
-			return algo2(tmp, rec);
+			Binumber test(algo2(tmp, rec));
+			return test;
 		}
 			
 		else
 		{
 			Binumber tmp(1, '0');
 			Binumber rec = algo4(m, n, m_size - 1);
-			return algo2(tmp, rec);
+			Binumber test = algo2(tmp, rec);
+			return test;
 		}
 	}
 }
@@ -142,16 +156,16 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
  
  Binumber algo5_rec(Binumber& m, Binumber& n, int N)
  {
-	 if(N<=128)
+	 if(N<=8)
 	 {
 		return algo4(m, n, N);
 	 }
 	 Binumber n1(n);
-	 n1.erase(0, N / 2 + 1);	 
+	 n1.erase(0, N / 2 );	 
 	 Binumber n2(n);
 	 n2.resize(N / 2);
 	 Binumber m1(m);
-	 m1.erase(0, N / 2 + 1);
+	 m1.erase(0, N / 2 );
 	 Binumber m2(m);
 	 m2.resize(N / 2);
 
@@ -164,26 +178,59 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 	 Binumber n1m2_plus_n2m1 = algo2(n1m2, n2m1);
 	 n1m2_plus_n2m1.shift_right(N / 2);
 
-	 Binumber res = algo2(n1m1, n1m2_plus_n2m1);
-	 Binumber test(algo2(res, n2m2));
-	 res.copy();
-
-
-
-
+	 Binumber res1 = algo2(n1m1, n1m2_plus_n2m1);
+	 Binumber res2 = algo2(res1, n2m2);
+	 return res2;
+	 
  }
 
 
 
  Binumber algo5(Binumber& m, Binumber& n)
  {
-	 if (m.size() != n.size() || n.size() % 2 != 0 || m.size() % 2 != 0)
-	 {
-		 cout << "invalid input for algo5";
-		 return NULL;
+
+	 //THE IF'S ARE FOR ASSURING THAT (NISSIM SIZE) = (MOSHE SIZE) = N AND N IS EVEN.
+	 //THIS IS ACCOMPLISHED WITH PADDING OF ZEROS WHERE NEEDED.
+	 /*if (m.size() % 2 != 0) {
+		 m.resize(m.size() + 1, '0');
 	 }
+	 if (n.size() % 2 != 0) {
+		 n.resize(n.size() + 1, '0');
+	 }
+	 if (n.size() > m.size())
+	 {
+		 m.resize(n.size(), '0');
+	 }
+	 if (m.size() > n.size())
+	 {
+		 n.resize(m.size(), '0');
+	 }*/
+	 int adjust = 0;
+	 if (m.size() % 2 != 0) {
+		 m.shift_right(1);
+		 adjust++;
+	 }
+	 if (n.size() % 2 != 0) {
+		 n.shift_right(1);
+		 adjust++;
+	 }
+	 if (n.size() > m.size())
+	 {
+		 adjust += n.size() - m.size();
+		 m.shift_right(n.size()-m.size());
+		 
+	 }
+	 if (m.size() > n.size())
+	 {
+		 adjust += m.size() - n.size();
+		 n.shift_right(m.size() - n.size());
+		 
+	 }
+
 	 int N = m.size();
-	 algo5_rec(m, n, N);
+	 Binumber res =  algo5_rec(m, n, N);
+	 res.erase(0, adjust);
+	 return res;
 
  }
 
@@ -192,9 +239,9 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 
 void main()
 {
-	const char* m = "1101"; //13
-	const char* n = "0011"; //3
-	Binumber num1(m,4), num2(n,4);
+	const char* m = "11011"; //13
+	const char* n = "00110110110"; //3
+	Binumber num1(m,5), num2(n,11);
 	
 	cout << "num1: "; num1.print();	cout << "dec value: " << num1.get_dec_val() << endl;
 	cout << "num2: "; num2.print();	cout << "dec value: " << num2.get_dec_val() << endl;
@@ -209,8 +256,22 @@ void main()
 	//algo2_res.print();
 	//cout << "dec val: " << algo2_res.get_dec_val() << endl;
 
-	Binumber algo3_res(algo3(num1, num2));
-	cout << "algo3 res: ";
-	algo3_res.print();
-	cout << "dec val: " << algo3_res.get_dec_val() << endl;
+	//Binumber algo3_res(algo3(num1, num2));
+	//cout << "algo3 res: ";
+	//algo3_res.print();
+	//cout << "dec val: " << algo3_res.get_dec_val() << endl;
+	//
+
+	/*Binumber algo4_res(algo4(num1, num2,4));
+	cout << "algo4 res: ";
+	algo4_res.print();
+	cout << "dec val: " << algo4_res.get_dec_val() << endl;*/
+
+	Binumber algo5_res(algo5(num1, num2));
+	cout << "algo5 res: ";
+	algo5_res.print();
+	cout << "dec val: " << algo5_res.get_dec_val() << endl;
+
+	
+
 }

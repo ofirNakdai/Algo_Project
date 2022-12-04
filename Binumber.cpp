@@ -15,6 +15,8 @@ Binumber::Binumber(const char* arrin, int lengthin)
 		
 	optimize();
 }
+
+
 Binumber::Binumber(int size, char bit)
 {
 	this->arr.reserve(size);
@@ -145,6 +147,11 @@ void Binumber::resize(int newSize)
 	arr.resize(newSize);
 }
 
+void Binumber::resize(int newSize, char val)
+{
+	arr.resize(newSize,val);
+}
+
 void Binumber::erase(int start, int end)
 {
 	arr.erase(arr.begin(), arr.begin() + end);
@@ -183,7 +190,7 @@ Binumber Binumber::shift_right(int len)
 	this->resize(this->arr.size() + len);
 	int i;
 
-	for (i = this->arr.size()-1; i > 0; i--)
+	for (i = this->arr.size()-1; i - len >= 0; i--)
 		this->arr[i] = this->arr[i - len];
 
 	for (i = 0; i < len; i++)

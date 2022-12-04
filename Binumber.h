@@ -32,6 +32,7 @@ public:
 	
 	int size(){ return this->arr.size(); }
 	void resize(int newSize);
+	void resize(int newSize, char val);//val = value inserted into new slots 
 	void erase(int start, int end);
 	void add1();
 	void dec1();
@@ -39,6 +40,8 @@ public:
 	int get_dec_val();
 	void pushBack(char val) { this->arr.push_back(val); }	
 	Binumber shift_right(int len);
+
+	
 
 private:
 	void optimize();//delete zero from the end 
