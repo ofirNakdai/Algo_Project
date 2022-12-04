@@ -31,14 +31,22 @@ Binumber::Binumber(Binumber& x)
 
 	optimize();
 }
+Binumber Binumber::operator = (Binumber& x)
+{
+	for (int i = 0; i < x.size(); i++)
+		arr.push_back(x.get_cell_bit(i) + '0');
 
-//void Binumber::copy(Binumber& x)
-//{
-//	for (int i = 0; i < x.size(); i++)
-//		arr.push_back(x.get_cell_bit(i) + '0');
-//
-//	optimize();
-//}
+	optimize();
+	return *this;
+}
+
+void Binumber::copy(Binumber& x)
+{
+	for (int i = 0; i < x.size(); i++)
+		arr.push_back(x.get_cell_bit(i) + '0');
+
+	optimize();
+}
 
 Binumber::Binumber(Binumber&& x)
 {
@@ -198,10 +206,10 @@ Binumber Binumber::shift_right(int len)
 
 	return *this;
 }
-int Binumber::cmp(Binumber& num)
+int Binumber::comp(Binumber& num)
 { // 1 - this > num     0 - this = num    -1 - this < num
 	int i = this->arr.size() - 1; // this last bit
-	int j = num->arr.size() - 1; // num's last bit
+	int j = num.size() - 1; // num's last bit
 
 	if (this->size() > num.size())
 		return 1;
@@ -209,7 +217,7 @@ int Binumber::cmp(Binumber& num)
 		return -1;
 	else
 	{//equal size
-		for (int i = this->size(); i >= 0; i--)
+		for (int i = this->size()-1; i >= 0; i--)
 		{
 			if (num.get_cell_bit(i) > this->get_cell_bit(i))
 				return -1;
