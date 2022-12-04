@@ -10,9 +10,9 @@ using namespace std;
 Binumber::Binumber(const char* arrin, int lengthin)
 {
 	arr.reserve(lengthin);
-	for(int i = lengthin-1; i>=0;i--)	
+	for (int i = lengthin - 1; i >= 0; i--)
 		arr.push_back(arrin[i]);
-		
+
 	optimize();
 }
 
@@ -20,25 +20,25 @@ Binumber::Binumber(const char* arrin, int lengthin)
 Binumber::Binumber(int size, char bit)
 {
 	this->arr.reserve(size);
-		for(int i=0; i<size; i++)
+	for (int i = 0; i < size; i++)
 		arr.push_back(bit);
 }
 
 Binumber::Binumber(Binumber& x)
-{
-	for (int i =0; i <  x.size(); i++)
-		arr.push_back(x.get_cell_bit(i) + '0');
-
-	optimize();
-}
-
-void Binumber::copy(Binumber& x)
 {
 	for (int i = 0; i < x.size(); i++)
 		arr.push_back(x.get_cell_bit(i) + '0');
 
 	optimize();
 }
+
+//void Binumber::copy(Binumber& x)
+//{
+//	for (int i = 0; i < x.size(); i++)
+//		arr.push_back(x.get_cell_bit(i) + '0');
+//
+//	optimize();
+//}
 
 Binumber::Binumber(Binumber&& x)
 {
@@ -53,9 +53,9 @@ Binumber::Binumber(Binumber&& x)
 void Binumber::set_arr(const char* arrin, int lengthin)
 {
 	arr.reserve(lengthin);
-	for(int i = lengthin-1; i>=0;i--)	
+	for (int i = lengthin - 1; i >= 0; i--)
 		arr.push_back(arrin[i]);
-		
+
 	optimize();
 }
 int Binumber::get_cell_bit(int cell)
@@ -89,7 +89,7 @@ void Binumber::add1()
 		flag = '1';
 		i = 0;
 
-		while (flag != '0' && i < this->arr.size()-1)
+		while (flag != '0' && i < this->arr.size() - 1)
 		{
 			if (arr[i] == '0')
 			{
@@ -112,7 +112,7 @@ void Binumber::add1()
 	}//else
 }
 void Binumber::dec1()
-{	
+{
 	char flag;
 	int i;
 
@@ -149,7 +149,7 @@ void Binumber::resize(int newSize)
 
 void Binumber::resize(int newSize, char val)
 {
-	arr.resize(newSize,val);
+	arr.resize(newSize, val);
 }
 
 void Binumber::erase(int start, int end)
@@ -178,7 +178,7 @@ void Binumber::print()
 int Binumber::get_dec_val()
 {
 	int sum = 0;
-	for (int i = arr.size()-1; i>= 0; i--)
+	for (int i = arr.size() - 1; i >= 0; i--)
 	{
 		if (arr[i] == '1')
 			sum += pow(2, i);
@@ -190,11 +190,33 @@ Binumber Binumber::shift_right(int len)
 	this->resize(this->arr.size() + len);
 	int i;
 
-	for (i = this->arr.size()-1; i - len >= 0; i--)
+	for (i = this->arr.size() - 1; i - len >= 0; i--)
 		this->arr[i] = this->arr[i - len];
 
 	for (i = 0; i < len; i++)
 		this->arr[i] = '0';
 
 	return *this;
+}
+int Binumber::cmp(Binumber& num)
+{ // 1 - this > num     0 - this = num    -1 - this < num
+	int i = this->arr.size() - 1; // this last bit
+	int j = num->arr.size() - 1; // num's last bit
+
+	if (this->size() > num.size())
+		return 1;
+	else if (num.size() > this->size())
+		return -1;
+	else
+	{//equal size
+		for (int i = this->size(); i >= 0; i--)
+		{
+			if (num.get_cell_bit(i) > this->get_cell_bit(i))
+				return -1;
+			else if (this->get_cell_bit(i) > num.get_cell_bit(i))
+				return 1;
+		}
+
+		return 0; // equal numbers
+	}
 }

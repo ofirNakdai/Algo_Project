@@ -16,14 +16,14 @@ Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 	return n;
 }
 
- Binumber algo2(Binumber& m, Binumber& n)
- {
- 	int flag = 0;
- 	int i = 0, n_size = n.size(), m_size = m.size(), res_num;
-	Binumber res(max(n_size,m_size));
-	
- 	while(i < n_size && i < m_size)
- 	{
+Binumber algo2(Binumber& m, Binumber& n)
+{
+	int flag = 0;
+	int i = 0, n_size = n.size(), m_size = m.size(), res_num;
+	Binumber res(max(n_size, m_size));
+
+	while (i < n_size && i < m_size)
+	{
 		res_num = m.get_cell_bit(i) + n.get_cell_bit(i) + flag;
 		switch (res_num)
 		{
@@ -44,11 +44,11 @@ Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 		default:
 			break;
 		}
-		
+
 		res.pushBack((char)res_num + '0');
 		i++;
 
- 	}
+	}
 
 	while (i < n_size)
 	{
@@ -77,7 +77,7 @@ Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 	}
 	while (i < m_size)
 	{
-		res_num = m.get_cell_bit(i)+ flag;
+		res_num = m.get_cell_bit(i) + flag;
 		switch (res_num)
 		{
 		case 0:
@@ -100,25 +100,25 @@ Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 		res.pushBack((char)res_num + '0');
 		i++;
 	}
-	
+
 	if (flag == 1)
 		res.pushBack('1');
 
 	return res;
- }
+}
 
- Binumber algo3(Binumber& m, Binumber& n)
+Binumber algo3(Binumber& m, Binumber& n)
 {
-	 Binumber mCopy(m), nCopy(n);
-	 mCopy.dec1();
-	 //for (int i = 0; i < t - 1; i++)
-	 while(mCopy.size()>0)
-	 {
+	Binumber mCopy(m), nCopy(n);
+	mCopy.dec1();
+	//for (int i = 0; i < t - 1; i++)
+	while (mCopy.size() > 0)
+	{
 		mCopy.dec1();
-		algo1(n, nCopy);		
-	 }
-		 
-	 
+		algo1(n, nCopy);
+	}
+
+
 	return nCopy;
 }
 
@@ -142,7 +142,7 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 			Binumber test(algo2(tmp, rec));
 			return test;
 		}
-			
+
 		else
 		{
 			Binumber tmp(1, '0');
@@ -153,101 +153,269 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 	}
 }
 
- 
- Binumber algo5_rec(Binumber& m, Binumber& n, int N)
- {
-	 if(N<=8)
-	 {
+Binumber algo5_rec(Binumber& m, Binumber& n, int N)
+{
+	int N = m.size();
+	if (N <= 8)
+	{
 		return algo4(m, n, N);
-	 }
-	 Binumber n1(n);
-	 n1.erase(0, N / 2 );	 
-	 Binumber n2(n);
-	 n2.resize(N / 2);
-	 Binumber m1(m);
-	 m1.erase(0, N / 2 );
-	 Binumber m2(m);
-	 m2.resize(N / 2);
-
-	 Binumber n1m1 = algo5_rec(n1, m1, N / 2);
-	 Binumber n1m2 = algo5_rec(n1, m2, N / 2);
-	 Binumber n2m1 = algo5_rec(n2, m1, N / 2);
-	 Binumber n2m2 = algo5_rec(n2, m2, N / 2);
-
-	 n1m1.shift_right(N);
-	 Binumber n1m2_plus_n2m1 = algo2(n1m2, n2m1);
-	 n1m2_plus_n2m1.shift_right(N / 2);
-
-	 Binumber res1 = algo2(n1m1, n1m2_plus_n2m1);
-	 Binumber res2 = algo2(res1, n2m2);
-	 return res2;
-	 
- }
-
-
-
- Binumber algo5(Binumber& m, Binumber& n)
- {
-
-	 //THE IF'S ARE FOR ASSURING THAT (NISSIM SIZE) = (MOSHE SIZE) = N AND N IS EVEN.
-	 //THIS IS ACCOMPLISHED WITH PADDING OF ZEROS WHERE NEEDED.
-	 /*if (m.size() % 2 != 0) {
-		 m.resize(m.size() + 1, '0');
-	 }
-	 if (n.size() % 2 != 0) {
-		 n.resize(n.size() + 1, '0');
-	 }
-	 if (n.size() > m.size())
-	 {
-		 m.resize(n.size(), '0');
-	 }
-	 if (m.size() > n.size())
-	 {
-		 n.resize(m.size(), '0');
-	 }*/
-	 int adjust = 0;
-	 if (m.size() % 2 != 0) {
-		 m.shift_right(1);
-		 adjust++;
-	 }
-	 if (n.size() % 2 != 0) {
-		 n.shift_right(1);
-		 adjust++;
-	 }
-	 if (n.size() > m.size())
-	 {
-		 adjust += n.size() - m.size();
-		 m.shift_right(n.size()-m.size());
-		 
-	 }
-	 if (m.size() > n.size())
-	 {
-		 adjust += m.size() - n.size();
-		 n.shift_right(m.size() - n.size());
-		 
-	 }
-
-	 int N = m.size();
-	 Binumber res =  algo5_rec(m, n, N);
-	 res.erase(0, adjust);
-	 return res;
-
- }
+	}
+	int adjustM = 0;
+	int adjustN = 0;
+	int adjust = 0;
+	if (m.size() % 2 != 0) {
+		m.shift_right(1);
+		adjustM++;
+	}
+	if (n.size() % 2 != 0) {
+		n.shift_right(1);
+		adjustN++;
+	}
+	if (n.size() > m.size())
+	{
+		adjustM += n.size() - m.size();
+		m.shift_right(n.size() - m.size());
+	}
+	if (m.size() > n.size())
+	{
+		adjustN += m.size() - n.size();
+		n.shift_right(m.size() - n.size());
+	}
+	adjust = adjustM + adjustN;
+	N = m.size();
 
 
- 
+	Binumber n1(n);
+	n1.erase(0, N / 2);
+	Binumber n2(n);
+	n2.resize(N / 2);
+	Binumber m1(m);
+	m1.erase(0, N / 2);
+	Binumber m2(m);
+	m2.resize(N / 2);
+
+	Binumber n1m1 = algo5_rec(n1, m1);
+	Binumber n1m2 = algo5_rec(n1, m2);
+	Binumber n2m1 = algo5_rec(n2, m1);
+	Binumber n2m2 = algo5_rec(n2, m2);
+
+	n1m1.shift_right(N);
+	Binumber n1m2_plus_n2m1 = algo2(n1m2, n2m1);
+	n1m2_plus_n2m1.shift_right(N / 2);
+
+	Binumber res1 = algo2(n1m1, n1m2_plus_n2m1);
+	Binumber res2 = algo2(res1, n2m2);
+
+	res2.erase(0, adjust);
+	n.erase(0, adjustN);
+	m.erase(0, adjustM);
+	return res2;
+
+}
+
+Binumber algo5(Binumber& m, Binumber& n)
+{
+	int adjustM = 0;
+	int adjustN = 0;
+	int adjust = 0;
+	if (m.size() % 2 != 0) {
+		m.shift_right(1);
+		adjustM++;
+	}
+	if (n.size() % 2 != 0) {
+		n.shift_right(1);
+		adjustN++;
+	}
+	if (n.size() > m.size())
+	{
+		adjustM += n.size() - m.size();
+		m.shift_right(n.size() - m.size());
+
+	}
+	if (m.size() > n.size())
+	{
+		adjustN += m.size() - n.size();
+		n.shift_right(m.size() - n.size());
+
+	}
+	adjust = adjustM + adjustN;
+	int N = m.size();
+	Binumber res = algo5_rec(m, n);
+	res.erase(0, adjust);
+	n.erase(0, adjustN);
+	m.erase(0, adjustM);
+	return res;
+}
+
+Binumber returnBiggerMinusSmallerBinumber(Binumber bigger, Binumber smaller)
+{
+	int temp = 0, carry = 0, index = 0;
+	Binumber copyOfBigger(bigger);
+	Binumber copyOfSmaller(smaller);
+	Binumber biggerMinusSmaller(0, '0');
+
+	while (copyOfSmaller.size() < copyOfBigger.size())
+		copyOfSmaller.pushBack('0');
+
+
+	for (int i = 0; i < copyOfBigger.size(); i++)
+	{
+		if (copyOfBigger.get_cell_bit(i) == 1 && copyOfSmaller.get_cell_bit(i) == 0)
+			biggerMinusSmaller.pushBack('1');
+
+		else if (copyOfBigger.get_cell_bit(i) == 1 && copyOfSmaller.get_cell_bit(i) == 1)
+			biggerMinusSmaller.pushBack('0');
+
+		else if (copyOfBigger.get_cell_bit(i) == 0 && copyOfSmaller.get_cell_bit(i) == 0)
+			biggerMinusSmaller.pushBack('0');
+
+		else
+		{
+			for (int j = i + 1; j < copyOfBigger.size(); j++)
+			{
+				if (copyOfBigger.get_cell_bit(j) == 0)
+					copyOfBigger.set_cell_bit(j, '1');
+				else
+				{
+					copyOfBigger.set_cell_bit(j, '0');
+					biggerMinusSmaller.pushBack('1');
+					break;
+				}
+			}
+		}
+	}
+	return biggerMinusSmaller;
+}
+
+Binumber algo6_rec(Binumber& m, Binumber& n)
+{
+	int N = m.size();
+	if (N <= 8)
+	{
+		return algo4(m, n, N);
+	}
+	int adjustM = 0;
+	int adjustN = 0;
+	int adjust = 0;
+	if (m.size() % 2 != 0) {
+		m.shift_right(1);
+		adjustM++;
+	}
+	if (n.size() % 2 != 0) {
+		n.shift_right(1);
+		adjustN++;
+	}
+	if (n.size() > m.size())
+	{
+		adjustM += n.size() - m.size();
+		m.shift_right(n.size() - m.size());
+	}
+	if (m.size() > n.size())
+	{
+		adjustN += m.size() - n.size();
+		n.shift_right(m.size() - n.size());
+	}
+	adjust = adjustM + adjustN;
+	N = m.size();
+
+	Binumber n1(n);
+	n1.erase(0, N / 2);
+	Binumber n2(n);
+	n2.resize(N / 2);
+	Binumber m1(m);
+	m1.erase(0, N / 2);
+	Binumber m2(m);
+	m2.resize(N / 2);
+
+	Binumber n1Plusn2 = algo2(n1, n2);
+	Binumber m1Plusm2 = algo2(m1, m2);
+
+	Binumber F = algo6_rec(n1, m1);
+	Binumber H = algo6_rec(n1Plusn2, m1Plusm2);
+	Binumber G = algo6_rec(n2, m2);
+
+	Binumber HminusF = returnBiggerMinusSmallerBinumber(H, F);
+	Binumber HminusFminusG = returnBiggerMinusSmallerBinumber(HminusF, G);
+
+	HminusFminusG.shift_right(N / 2);
+	F.shift_right(N);
+
+	Binumber res1 = algo2(F, HminusFminusG);
+	Binumber res2 = algo2(res1, G);
+
+	res2.erase(0, adjust);
+	n.erase(0, adjustN);
+	m.erase(0, adjustM);
+	return res2;
+}
+
+
+Binumber algo6(Binumber& m, Binumber& n)
+{
+	int adjustM = 0;
+	int adjustN = 0;
+	int adjust = 0;
+	if (m.size() % 2 != 0) {
+		m.shift_right(1);
+		adjustM++;
+	}
+	if (n.size() % 2 != 0) {
+		n.shift_right(1);
+		adjustN++;
+	}
+	if (n.size() > m.size())
+	{
+		adjustM += n.size() - m.size();
+		m.shift_right(n.size() - m.size());
+
+	}
+	if (m.size() > n.size())
+	{
+		adjustN += m.size() - n.size();
+		n.shift_right(m.size() - n.size());
+
+	}
+	adjust = adjustM + adjustN;
+	int N = m.size();
+	Binumber res = algo6_rec(m, n);
+	res.erase(0, adjust);
+	n.erase(0, adjustN);
+	m.erase(0, adjustM);
+	return res;
+
+}
+
+
+Binumber* algo7(Binumber& m, Binumber& n)
+{ //  n / m
+
+	Binumber res[2];
+	Binumber q(1, '0');
+
+	while (algo4(m, q, m.size).cmp(n) == -1)
+	{// while (mq < n)
+		q.add1();
+	}
+
+	q.dec1();
+	res[0] = q;
+	res[1] = returnBiggerMinusSmallerBinumber(n, (algo4(m, q, m.size));
+
+	return res;
+}
+
 
 void main()
 {
-	const char* m = "11011"; //13
-	const char* n = "00110110110"; //3
-	Binumber num1(m,5), num2(n,11);
-	
+	const char* m = "11011";
+	const char* n = "0011011011011110101";
+	Binumber num1(m, 5), num2(n, 19);
+
 	cout << "num1: "; num1.print();	cout << "dec value: " << num1.get_dec_val() << endl;
 	cout << "num2: "; num2.print();	cout << "dec value: " << num2.get_dec_val() << endl;
-	
+
 	/*Binumber algo1_res = algo1(num1, num2);
-	cout << "algo1 res: "; 
+	cout << "algo1 res: ";
 	algo1_res.print();
 	cout << "dec val: " << algo1_res.get_dec_val() << endl;*/
 
@@ -267,11 +435,32 @@ void main()
 	algo4_res.print();
 	cout << "dec val: " << algo4_res.get_dec_val() << endl;*/
 
-	Binumber algo5_res(algo5(num1, num2));
+
+	/*Binumber algo5_res(algo5(num1, num2));
 	cout << "algo5 res: ";
 	algo5_res.print();
 	cout << "dec val: " << algo5_res.get_dec_val() << endl;
 
-	
+	Binumber algo6_res(algo6(num1, num2));
+	cout << "algo6 res: ";
+	algo6_res.print();
+	cout << "dec val: " << algo6_res.get_dec_val() << endl;*/
+
+	/*Binumber test = returnBiggerMinusSmallerBinumber(num2, num1);
+	test.print();
+	cout << test.get_dec_val();*/
+
+	Binumber algo7_res[2](algo7(num1, num2));
+	cout << "algo7 res: q= ";
+	algo7_res[0].print();
+	cout << "  r = ";
+	algo7_res[1].print();
+
+	cout << "dec val: q = " << algo7_res[0].get_dec_val() << "      r= " << algo7_res[1].get_dec_val() << endl;
+
+
+
+
+
 
 }
