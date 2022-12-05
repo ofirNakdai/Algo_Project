@@ -4,7 +4,7 @@
 #include <vector>
 using namespace std;
 
-#define RECURSION_STOP 4
+#define RECURSION_STOP 8
 
 Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 {
