@@ -15,6 +15,17 @@ Binumber::Binumber(const char* arrin, int lengthin)
 
 	optimize();
 }
+
+Binumber::Binumber(const char* arrin)
+{
+	int lengthin = strlen(arrin);
+	arr.reserve(lengthin);
+	for (int i = lengthin - 1; i >= 0; i--)
+		arr.push_back(arrin[i]);
+
+	optimize();
+}
+
 Binumber::Binumber(int size, char bit)
 {
 	this->arr.reserve(size);
@@ -28,7 +39,7 @@ Binumber::Binumber(Binumber& x)
 
 	optimize();
 }
-Binumber::Binumber (Binumber&& x)
+Binumber::Binumber(Binumber&& x)
 {
 	arr = x.arr;
 	/*for (int i =0; i <  x.size(); i++)
@@ -157,6 +168,8 @@ void Binumber::resize(int newSize, char val)
 }
 void Binumber::erase(int start, int end)
 {
+	if (end > arr.size())
+		end = arr.size();
 	arr.erase(arr.begin(), arr.begin() + end);
 }
 

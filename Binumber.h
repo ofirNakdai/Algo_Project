@@ -19,6 +19,7 @@ public:
 		this->arr.reserve(size);
 	}
 	Binumber(const char* arrin, int lengthin);
+	Binumber(const char* arrin);
 	Binumber(int size, char bit);
 	Binumber(Binumber& x); // copy c'tor
 	Binumber(Binumber&& x); // move c'tor

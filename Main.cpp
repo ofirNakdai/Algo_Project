@@ -4,6 +4,8 @@
 #include <vector>
 using namespace std;
 
+#define RECURSION_STOP 4
+
 Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 {
 	Binumber mCopy(m);
@@ -153,12 +155,12 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 	}
 }
 
-Binumber algo5_rec(Binumber& m, Binumber& n, int N)
+Binumber algo5_rec(Binumber& m, Binumber& n)
 {
-	//int N = m.size();
-	if (N <= 8)
+	int N;
+	if (m.size() <= RECURSION_STOP && n.size() <= RECURSION_STOP)
 	{
-		return algo4(m, n, N);
+		return algo4(m, n, m.size());
 	}
 	int adjustM = 0;
 	int adjustN = 0;
@@ -194,11 +196,11 @@ Binumber algo5_rec(Binumber& m, Binumber& n, int N)
 	Binumber m2(m);
 	m2.resize(N / 2);
 
-	// asking Roman
-	Binumber n1m1 = algo5_rec(n1, m1, N-1);
-	Binumber n1m2 = algo5_rec(n1, m2, N-1);
-	Binumber n2m1 = algo5_rec(n2, m1, N-1);
-	Binumber n2m2 = algo5_rec(n2, m2, N-1);
+	
+	Binumber n1m1 = algo5_rec(n1, m1);
+	Binumber n1m2 = algo5_rec(n1, m2);
+	Binumber n2m1 = algo5_rec(n2, m1);
+	Binumber n2m2 = algo5_rec(n2, m2);
 
 	n1m1.shift_right(N);
 	Binumber n1m2_plus_n2m1 = algo2(n1m2, n2m1);
@@ -241,7 +243,7 @@ Binumber algo5(Binumber& m, Binumber& n)
 	}
 	adjust = adjustM + adjustN;
 	int N = m.size();
-	Binumber res = algo5_rec(m, n, N-1);
+	Binumber res = algo5_rec(m, n);
 	res.erase(0, adjust);
 	n.erase(0, adjustN);
 	m.erase(0, adjustM);
@@ -288,12 +290,13 @@ Binumber returnBiggerMinusSmallerBinumber(Binumber bigger, Binumber smaller)
 	return biggerMinusSmaller;
 }
 
+
 Binumber algo6_rec(Binumber& m, Binumber& n)
 {
-	int N = m.size();
-	if (N <= 8)
+	int N;
+	if (m.size() <= RECURSION_STOP && n.size() <= RECURSION_STOP)
 	{
-		return algo4(m, n, N);
+		return algo4(m, n, m.size());
 	}
 	int adjustM = 0;
 	int adjustN = 0;
@@ -443,9 +446,9 @@ void algo8(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 
 void main()
 {
-	const char* m = "1001"; // 25
-	const char* n = "11"; // 3
-	Binumber num1(m, 4), num2(n, 2);
+	const char* m = "0"; // 8
+	const char* n = "1"; // 5
+	Binumber num1(m), num2(n);
 
 	cout << "num1: "; num1.print();	cout << "dec value: " << num1.get_dec_val() << endl;
 	cout << "num2: "; num2.print();	cout << "dec value: " << num2.get_dec_val() << endl;
@@ -472,7 +475,7 @@ void main()
 	cout << "dec val: " << algo4_res.get_dec_val() << endl;*/
 
 
-	/*Binumber algo5_res(algo5(num1, num2));
+	Binumber algo5_res(algo5(num1, num2));
 	cout << "algo5 res: ";
 	algo5_res.print();
 	cout << "dec val: " << algo5_res.get_dec_val() << endl;
@@ -480,14 +483,14 @@ void main()
 	Binumber algo6_res(algo6(num1, num2));
 	cout << "algo6 res: ";
 	algo6_res.print();
-	cout << "dec val: " << algo6_res.get_dec_val() << endl;*/
+	cout << "dec val: " << algo6_res.get_dec_val() << endl;
 
 	/*Binumber test = returnBiggerMinusSmallerBinumber(num2, num1);
 	test.print();
 	cout << test.get_dec_val();*/
 
 	
-	Binumber q_algo7_res;
+	/*Binumber q_algo7_res;
 	Binumber r_algo7_res;
 
 	algo7(num1, num2, q_algo7_res, r_algo7_res);
@@ -495,7 +498,7 @@ void main()
 
 
 	algo8(num1, num2, q_algo7_res, r_algo7_res);
-	cout << "algo 8: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
+	cout << "algo 8: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;*/
 
 	
 
