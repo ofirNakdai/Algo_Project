@@ -9,7 +9,7 @@ class Binumber
 	vector<char> arr;
 
 public:
-	Binumber();
+	Binumber() = default;
 	Binumber(int size)
 	{
 		if (size == 0)
@@ -26,7 +26,7 @@ public:
 
 
 	void set_arr(const char* arrin, int lengthin);
-	void copy(Binumber& x);
+	//void copy(Binumber& x);
 	int get_cell_bit(int cell);
 	void set_cell_bit(int cell, char bit);
 
@@ -41,7 +41,8 @@ public:
 	void pushBack(char val) { this->arr.push_back(val); }
 	Binumber shift_right(int len);
 	int comp(Binumber& num);
-	Binumber operator = (Binumber& x);
+	Binumber operator = (const Binumber& x);
+	Binumber dev2();
 
 
 private:

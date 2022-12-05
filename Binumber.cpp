@@ -15,15 +15,12 @@ Binumber::Binumber(const char* arrin, int lengthin)
 
 	optimize();
 }
-
-
 Binumber::Binumber(int size, char bit)
 {
 	this->arr.reserve(size);
 	for (int i = 0; i < size; i++)
 		arr.push_back(bit);
 }
-
 Binumber::Binumber(Binumber& x)
 {
 	for (int i = 0; i < x.size(); i++)
@@ -31,32 +28,32 @@ Binumber::Binumber(Binumber& x)
 
 	optimize();
 }
-Binumber Binumber::operator = (Binumber& x)
-{
-	for (int i = 0; i < x.size(); i++)
-		arr.push_back(x.get_cell_bit(i) + '0');
-
-	optimize();
-	return *this;
-}
-
-void Binumber::copy(Binumber& x)
-{
-	for (int i = 0; i < x.size(); i++)
-		arr.push_back(x.get_cell_bit(i) + '0');
-
-	optimize();
-}
-
-Binumber::Binumber(Binumber&& x)
+Binumber::Binumber (Binumber&& x)
 {
 	arr = x.arr;
 	/*for (int i =0; i <  x.size(); i++)
 		arr.push_back(x.get_cell_bit(i) + '0');
 
 	optimize();*/
-}
+} 
 
+
+Binumber Binumber::operator = (const Binumber& x)
+{
+	this->arr = x.arr;
+	/*for (int i = 0; i < x.size(); i++)
+		arr.push_back(x.get_cell_bit(i) + '0');
+
+	optimize();*/
+	return *this;
+}
+/*void Binumber::copy(Binumber& x)
+{
+	for (int i = 0; i < x.size(); i++)
+		arr.push_back(x.get_cell_bit(i) + '0');
+
+	optimize();
+}*/
 
 void Binumber::set_arr(const char* arrin, int lengthin)
 {
@@ -154,12 +151,10 @@ void Binumber::resize(int newSize)
 {
 	arr.resize(newSize);
 }
-
 void Binumber::resize(int newSize, char val)
 {
 	arr.resize(newSize, val);
 }
-
 void Binumber::erase(int start, int end)
 {
 	arr.erase(arr.begin(), arr.begin() + end);
@@ -170,7 +165,7 @@ void Binumber::optimize()
 {//delete zero from the end 
 	int i = this->arr.size() - 1;
 
-	while (i >= 0 && arr[i] == '0')
+	while (i > 0 && arr[i] == '0')
 		i--;
 	i++;
 
@@ -206,10 +201,26 @@ Binumber Binumber::shift_right(int len)
 
 	return *this;
 }
+Binumber Binumber::dev2()
+{ // 11011001001  -> 1101100100
+	if (this->size() == 1)
+		this->arr[0] = '0';
+	else // size > 1
+	{
+		for (int i = 0; i < arr.size()-1; i++)
+			this->arr[i] = this->arr[i + 1];
+
+		this->resize(this->arr.size() - 1);
+
+		return *this;
+
+	}
+
+}
 int Binumber::comp(Binumber& num)
 { // 1 - this > num     0 - this = num    -1 - this < num
-	int i = this->arr.size() - 1; // this last bit
-	int j = num.size() - 1; // num's last bit
+	this->optimize();
+	num.optimize();
 
 	if (this->size() > num.size())
 		return 1;

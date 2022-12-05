@@ -387,7 +387,7 @@ Binumber algo6(Binumber& m, Binumber& n)
 }
 
 
-Binumber algo7(Binumber& n, Binumber& m)
+void algo7(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 { //  n / m
 
 	Binumber q(1, '0');
@@ -395,17 +395,55 @@ Binumber algo7(Binumber& n, Binumber& m)
 	while (algo4(m, q, m.size()).comp(n) == -1)// while (mq < n)
 		q.add1();
 
-	if (n.comp(m) == 1 && (algo4(m, q, m.size())).comp(n) != 0)// if(n>m && mq!=m)
+	if (algo4(m, q, m.size()).comp(n) == 0)// if(mk == n)
+		q_out = q;
+	else
+	{
 		q.dec1();
-	return q;
+		q_out = q;
+	}
 
-	Binumber res[2] = { q, returnBiggerMinusSmallerBinumber(n, (algo4(m, q, m.size()))) };
+	Binumber mq = algo4(m, q, m.size());
+	Binumber tmp = returnBiggerMinusSmallerBinumber(n, mq);
+	r_out = tmp;
 }
 
+void algo8(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
+{
+	Binumber start(1, '1');
+	Binumber end(n);
+	Binumber res(1, '0');
+
+	while (end.comp(start) == 1 || end.comp(start) == 0) // while (end >= start)
+	{
+		q_out = algo2(start, end); // long adding
+		q_out.dev2();
+
+		res = algo4(m, q_out, m.size()); // long multi
+		if (res.comp(n) == 0)//res == n
+			break;
+		else if (res.comp(n) == 1 || res.comp(n) == 0)// if res >= n
+		{
+			q_out.dec1();
+			end = q_out;
+		}
+		else {
+			q_out.add1();
+			start = q_out;
+		}
+
+	}
+
+	if (algo4(m, q_out, m.size()).comp(n) != 0)// if(mk != n) means m does not devide n
+		q_out.dec1();
+
+	res = algo4(m, q_out, m.size());//long multi
+	r_out = returnBiggerMinusSmallerBinumber(n, res);
+}
 
 void main()
 {
-	const char* m = "1001"; // 9
+	const char* m = "1001"; // 25
 	const char* n = "11"; // 3
 	Binumber num1(m, 4), num2(n, 2);
 
@@ -448,14 +486,18 @@ void main()
 	test.print();
 	cout << test.get_dec_val();*/
 
-	Binumber q_algo7_res = algo7(num1, num2);
-	Binumber r_algo7_res = returnBiggerMinusSmallerBinumber(num1, (algo4(num2, q_algo7_res, num2.size())));
-	cout << "algo7 res: q= ";
-	q_algo7_res.print();
-	cout << "  r = ";
-	r_algo7_res.print();
+	
+	Binumber q_algo7_res;
+	Binumber r_algo7_res;
 
-	cout << "dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
+	algo7(num1, num2, q_algo7_res, r_algo7_res);
+	cout << "algo 7: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
+
+
+	algo8(num1, num2, q_algo7_res, r_algo7_res);
+	cout << "algo 8: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
+
+	
 
 
 
