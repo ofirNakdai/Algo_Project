@@ -1,6 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #pragma once
 #include <vector>
+#include <string>
+#include <fstream>
+
 
 using namespace std;
 
@@ -14,11 +17,12 @@ public:
 	{
 		if (size == 0)
 		{
-			this->arr.push_back(0);
+			this->arr.push_back('0');
 		}
 		this->arr.reserve(size);
 	}
 	Binumber(const char* arrin, int lengthin);
+	Binumber(string arrin, int lengthin);
 	Binumber(const char* arrin);
 	Binumber(int size, char bit);
 	Binumber(Binumber& x); // copy c'tor
@@ -37,6 +41,7 @@ public:
 	void erase(int start, int end);
 	void add1();
 	void dec1();
+	void print_to_file(fstream& out_file);
 	void print();
 	int get_dec_val();
 	void pushBack(char val) { this->arr.push_back(val); }

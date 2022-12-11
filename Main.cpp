@@ -3,24 +3,28 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 
 string DIV_BY_0 = "ERROR! div by zero is not allowed";
 Binumber zero(1, '0');
+#define RECURSION_STOP 6
 
 using namespace std;
 
-#define RECURSION_STOP 8
+
+
 
 Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 {
 	Binumber mCopy(m);
+	Binumber nCopy(n);
 	while (mCopy.size() > 0)
 	{
-		n.add1();
+		nCopy.add1();
 		mCopy.dec1();
 	}
 
-	return n;
+	return nCopy;
 }
 
 Binumber algo2(Binumber& m, Binumber& n)
@@ -117,12 +121,14 @@ Binumber algo2(Binumber& m, Binumber& n)
 Binumber algo3(Binumber& m, Binumber& n)
 {// naive multiplication
 	Binumber mCopy(m), nCopy(n);
+	Binumber tmp(n);
+
 	mCopy.dec1();
 	//for (int i = 0; i < t - 1; i++)
 	while (mCopy.size() > 0)
 	{
 		mCopy.dec1();
-		algo1(n, nCopy);
+		tmp = algo1(n, tmp);
 	}
 
 
@@ -131,6 +137,7 @@ Binumber algo3(Binumber& m, Binumber& n)
 
 Binumber algo4(Binumber& m, Binumber& n, int m_size)
 {// m_size = m.size() -1		long multiplication
+	
 	/*if (m_size == 1)
 	{
 		if (m.get_cell_bit(0) == 1)
@@ -138,7 +145,7 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 		else
 			return Binumber(1, '0');
 	}*/
-	if (m_size <= 128)
+	if (m_size <= RECURSION_STOP)
 	{
 		return algo3(m, n);
 	}
@@ -156,9 +163,8 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 
 		else
 		{
-			Binumber tmp(1, '0');
 			Binumber rec = algo4(m, n, m_size - 1);
-			Binumber test = algo2(tmp, rec);
+			Binumber test = algo2(zero, rec);
 			return test;
 		}
 	}
@@ -166,8 +172,8 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 
 Binumber algo5_rec(Binumber& m, Binumber& n)
 {
-	//int N = m.size();
-	if (N <= 8)
+	int N;
+	if (m.size() <= RECURSION_STOP && n.size() <= RECURSION_STOP)
 	{
 		return algo4(m, n, m.size());
 	}
@@ -397,7 +403,6 @@ Binumber algo6(Binumber& m, Binumber& n)
 
 }
 
-
 void algo7(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 { //  n / m
 
@@ -425,7 +430,7 @@ void algo7(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 }
 
 void algo8(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
-{
+{ // n / m
 	Binumber start(1, '1');
 	Binumber end(n);
 	Binumber res(1, '0');
@@ -462,75 +467,190 @@ void algo8(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 	r_out = returnBiggerMinusSmallerBinumber(n, res);
 }
 
-void main()
+
+void run_algorithms_up_to_num(fstream& out_file, Binumber& m, Binumber& n, int num)
 {
-	const char* m = "1001"; // 25
-	const char* n = "0"; // 3
-	Binumber num1(m, 4), num2(n, 1);
+	if (num >= 1)
+	{
+		algo1(m, n).print_to_file(out_file);
+	}
+	if (num >= 2)
+	{
+		algo2(m, n).print_to_file(out_file);
 
-	cout << "num1: "; num1.print();	cout << "dec value: " << num1.get_dec_val() << endl;
-	cout << "num2: "; num2.print();	cout << "dec value: " << num2.get_dec_val() << endl;
+	}
+	if (num >= 3)
+	{
+		algo3(m, n).print_to_file(out_file);
 
-	/*Binumber algo1_res = algo1(num1, num2);
-	cout << "algo1 res: ";
-	algo1_res.print();
-	cout << "dec val: " << algo1_res.get_dec_val() << endl;*/
+	}
+	if (num >= 4)
+	{
+		algo4(m, n, m.size()).print_to_file(out_file);
 
-	//Binumber algo2_res = algo2(num1, num2);
-	//cout << "algo2 res: ";
-	//algo2_res.print();
-	//cout << "dec val: " << algo2_res.get_dec_val() << endl;
+	}
+	if (num >= 5)
+	{
+		algo5(m, n).print_to_file(out_file);
 
-	//Binumber algo3_res(algo3(num1, num2));
-	//cout << "algo3 res: ";
-	//algo3_res.print();
-	//cout << "dec val: " << algo3_res.get_dec_val() << endl;
+	}
+	if (num >= 6)
+	{
+		algo6(m, n).print_to_file(out_file);
+
+	}
+	if (num >= 7)
+	{
+		Binumber q_algo7_res;
+		Binumber r_algo7_res;
+
+		try
+		{
+			algo7(m, n, q_algo7_res, r_algo7_res);
+			q_algo7_res.print_to_file(out_file);
+			r_algo7_res.print_to_file(out_file);
+		}
+		catch (string msg)
+		{
+			cout << msg << endl;
+		}
+	}
+	if (num >= 8)
+	{
+		Binumber q_algo8_res;
+		Binumber r_algo8_res;
+
+		try
+		{
+			algo7(m, n, q_algo8_res, r_algo8_res);
+			q_algo8_res.print_to_file(out_file);
+			r_algo8_res.print_to_file(out_file);
+		}
+		catch (string msg)
+		{
+			cout << msg << endl;
+		}
+	}
+
+}
+
+void main(int argc, char* argv[])
+{
+	fstream fin, fout;
+	fin.open(argv[1], ios::in);
+	if (!fin)
+	{
+		cout << "Input File doesn't exist!" << endl;
+	}
+	fout.open(argv[2], ios::out);
+	if (!fout)
+	{
+		cout << "Output File doesn't exist!" << endl;
+	}
+
+	string line1, line2, line3;
+	int algo_num;
+	getline(fin, line1);
+	algo_num = stoi(line1);
+
+	if (algo_num < 0 || algo_num > 8)
+	{
+		cout << " error: invalid algo num" << endl;
+	}
+	else
+	{
+		getline(fin, line2);
+		if (line2.size() == 0)
+		{
+			cout << " error: missing number!" << endl;
+			system("pause");
+			exit(0);
+		}
+		getline(fin, line3);
+		if (line3.size() == 0)
+		{
+			cout << " error: missing number!" << endl;
+			system("pause");
+			exit(0);
+		}
+
+		Binumber m(line2, line2.size()); //first m
+		Binumber n(line3, line3.size());// second n
+		run_algorithms_up_to_num(fout, m, n, algo_num);
+	}
+
+
+
+
+
+
+	//const char* m = "1001"; // 25
+	//const char* n = "0"; // 3
+	//Binumber num1(m, 4), num2(n, 1);
+
+	//cout << "num1: "; num1.print();	cout << "dec value: " << num1.get_dec_val() << endl;
+	//cout << "num2: "; num2.print();	cout << "dec value: " << num2.get_dec_val() << endl;
+
+	///*Binumber algo1_res = algo1(num1, num2);
+	//cout << "algo1 res: ";
+	//algo1_res.print();
+	//cout << "dec val: " << algo1_res.get_dec_val() << endl;*/
+
+	////Binumber algo2_res = algo2(num1, num2);
+	////cout << "algo2 res: ";
+	////algo2_res.print();
+	////cout << "dec val: " << algo2_res.get_dec_val() << endl;
+
+	////Binumber algo3_res(algo3(num1, num2));
+	////cout << "algo3 res: ";
+	////algo3_res.print();
+	////cout << "dec val: " << algo3_res.get_dec_val() << endl;
+	////
+
+	///*Binumber algo4_res(algo4(num1, num2,4));
+	//cout << "algo4 res: ";
+	//algo4_res.print();
+	//cout << "dec val: " << algo4_res.get_dec_val() << endl;*/
+
+
+	//Binumber algo5_res(algo5(num1, num2));
+	//cout << "algo5 res: ";
+	//algo5_res.print();
+	//cout << "dec val: " << algo5_res.get_dec_val() << endl;
+
+	//Binumber algo6_res(algo6(num1, num2));
+	//cout << "algo6 res: ";
+	//algo6_res.print();
+	//cout << "dec val: " << algo6_res.get_dec_val() << endl;
+
+	///*Binumber test = returnBiggerMinusSmallerBinumber(num2, num1);
+	//test.print();
+	//cout << test.get_dec_val();*/
+
 	//
+	//Binumber q_algo7_res;
+	//Binumber r_algo7_res;
 
-	/*Binumber algo4_res(algo4(num1, num2,4));
-	cout << "algo4 res: ";
-	algo4_res.print();
-	cout << "dec val: " << algo4_res.get_dec_val() << endl;*/
+	//try
+	//{
+	//	algo7(num1, num2, q_algo7_res, r_algo7_res);
+	//	cout << "algo 7: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
+	//}
+	//catch(string msg)
+	//{
+	//	cout << msg << endl;
+	//}
 
-
-	Binumber algo5_res(algo5(num1, num2));
-	cout << "algo5 res: ";
-	algo5_res.print();
-	cout << "dec val: " << algo5_res.get_dec_val() << endl;
-
-	Binumber algo6_res(algo6(num1, num2));
-	cout << "algo6 res: ";
-	algo6_res.print();
-	cout << "dec val: " << algo6_res.get_dec_val() << endl;
-
-	/*Binumber test = returnBiggerMinusSmallerBinumber(num2, num1);
-	test.print();
-	cout << test.get_dec_val();*/
-
-	
-	/*Binumber q_algo7_res;
-	Binumber r_algo7_res;
-
-	try
-	{
-		algo7(num1, num2, q_algo7_res, r_algo7_res);
-		cout << "algo 7: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
-	}
-	catch(string msg)
-	{
-		cout << msg << endl;
-	}
-
-	try
-	{
-		algo8(num1, num2, q_algo7_res, r_algo7_res);
-		cout << "algo 8: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
-	}
-	catch (string msg)
-	{
-		cout << msg << endl;
-	}
-	
+	//try
+	//{
+	//	algo8(num1, num2, q_algo7_res, r_algo7_res);
+	//	cout << "algo 8: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
+	//}
+	//catch (string msg)
+	//{
+	//	cout << msg << endl;
+	//}
+	//
 
 
 

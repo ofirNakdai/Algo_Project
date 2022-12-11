@@ -3,6 +3,8 @@
 #include "Binumber.h"
 #include <iostream>
 #include <vector>
+#include <fstream>
+
 
 using namespace std;
 
@@ -13,6 +15,21 @@ Binumber::Binumber(const char* arrin, int lengthin)
 	for (int i = lengthin - 1; i >= 0; i--)
 		arr.push_back(arrin[i]);
 
+	optimize();
+}
+Binumber::Binumber(string arrin, int lengthin)
+{
+	arr.reserve(lengthin);
+	for (int i = lengthin - 1; i >= 0; i--) {
+		if (arrin[i] == '0' || arrin[i] == '1')
+			arr.push_back(arrin[i]);
+		else
+		{
+			cout << " error: invalid number, not in Binary Base " << endl;
+			system("pause");
+			exit(1);
+		}
+	}
 	optimize();
 }
 
@@ -178,12 +195,18 @@ void Binumber::optimize()
 {//delete zero from the end 
 	int i = this->arr.size() - 1;
 
-	while (i > 1 && arr[i] == '0')
+	while (i >= 0 && arr[i] == '0')
 		i--;
 	i++;
 
 	if (i < this->arr.size())
 		arr.resize(i);
+}
+void Binumber::print_to_file(fstream& out_file)
+{
+	for (int i = this->arr.size() - 1; i >= 0; i--)
+		out_file << arr[i];
+	out_file << endl;
 }
 void Binumber::print()
 {
