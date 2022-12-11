@@ -113,6 +113,11 @@ void Binumber::add1()
 {
 	char flag = '1';
 	int i;
+	if (this->arr.size() == 0)
+	{
+		this->arr.push_back('1');
+		return;
+	}
 
 	if (arr[0] == '0')
 		arr[0] = '1';
@@ -148,6 +153,8 @@ void Binumber::dec1()
 {
 	char flag;
 	int i;
+	if (this->arr.size() <= 0)
+		return;
 
 	if (arr[0] == '1')
 		arr[0] = '0';
@@ -206,6 +213,9 @@ void Binumber::print_to_file(fstream& out_file)
 {
 	for (int i = this->arr.size() - 1; i >= 0; i--)
 		out_file << arr[i];
+
+	if (this->arr.size() == 0)
+		out_file << '0';
 	out_file << endl;
 }
 void Binumber::print()

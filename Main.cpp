@@ -132,7 +132,7 @@ Binumber algo3(Binumber& m, Binumber& n)
 	}
 
 
-	return nCopy;
+	return tmp;
 }
 
 Binumber algo4(Binumber& m, Binumber& n, int m_size)
@@ -460,8 +460,8 @@ void algo8(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 
 	}
 
-	if (algo4(m, q_out, m.size()).comp(n) != 0)// if(mk != n) means m does not devide n
-		q_out.dec1();
+	//if (algo4(m, q_out, m.size()).comp(n) != 0)// if(mk != n) means m does not devide n
+	//	q_out.dec1();
 
 	res = algo4(m, q_out, m.size());//long multi
 	r_out = returnBiggerMinusSmallerBinumber(n, res);
@@ -522,7 +522,7 @@ void run_algorithms_up_to_num(fstream& out_file, Binumber& m, Binumber& n, int n
 
 		try
 		{
-			algo7(m, n, q_algo8_res, r_algo8_res);
+			algo8(m, n, q_algo8_res, r_algo8_res);
 			q_algo8_res.print_to_file(out_file);
 			r_algo8_res.print_to_file(out_file);
 		}
