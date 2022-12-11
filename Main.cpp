@@ -2,6 +2,11 @@
 #include "Binumber.h"
 #include <iostream>
 #include <vector>
+#include <string>
+
+string DIV_BY_0 = "ERROR! div by zero is not allowed";
+Binumber zero(1, '0');
+
 using namespace std;
 
 Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
@@ -17,7 +22,7 @@ Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 }
 
 Binumber algo2(Binumber& m, Binumber& n)
-{
+{// long adding
 	int flag = 0;
 	int i = 0, n_size = n.size(), m_size = m.size(), res_num;
 	Binumber res(max(n_size, m_size));
@@ -108,7 +113,7 @@ Binumber algo2(Binumber& m, Binumber& n)
 }
 
 Binumber algo3(Binumber& m, Binumber& n)
-{
+{// naive multiplication
 	Binumber mCopy(m), nCopy(n);
 	mCopy.dec1();
 	//for (int i = 0; i < t - 1; i++)
@@ -123,13 +128,17 @@ Binumber algo3(Binumber& m, Binumber& n)
 }
 
 Binumber algo4(Binumber& m, Binumber& n, int m_size)
-{// m_size = m.size() -1
-	if (m_size == 1)
+{// m_size = m.size() -1		long multiplication
+	/*if (m_size == 1)
 	{
 		if (m.get_cell_bit(0) == 1)
 			return Binumber(n);
 		else
 			return Binumber(1, '0');
+	}*/
+	if (m_size <= 128)
+	{
+		return algo3(m, n);
 	}
 
 	else
@@ -155,7 +164,7 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 
 Binumber algo5_rec(Binumber& m, Binumber& n, int N)
 {
-	//int N = m.size();
+	//int N = m.size(); asking Roman
 	if (N <= 8)
 	{
 		return algo4(m, n, N);
@@ -350,7 +359,6 @@ Binumber algo6_rec(Binumber& m, Binumber& n)
 	return res2;
 }
 
-
 Binumber algo6(Binumber& m, Binumber& n)
 {
 	int adjustM = 0;
@@ -390,9 +398,14 @@ Binumber algo6(Binumber& m, Binumber& n)
 void algo7(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 { //  n / m
 
-	Binumber q(1, '0');
+	Binumber q(zero);
 
-	while (algo4(m, q, m.size()).comp(n) == -1)// while (mq < n)
+	if (m.comp(zero) == 0)
+	{
+		throw DIV_BY_0;// division by 0
+	}
+
+	while (algo4(m, q, m.size()).comp(n) == -1) // while (mq < n)
 		q.add1();
 
 	if (algo4(m, q, m.size()).comp(n) == 0)// if(mk == n)
@@ -413,6 +426,11 @@ void algo8(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 	Binumber start(1, '1');
 	Binumber end(n);
 	Binumber res(1, '0');
+
+	if (m.comp(zero) == 0)
+	{
+		throw DIV_BY_0;// division by 0
+	}
 
 	while (end.comp(start) == 1 || end.comp(start) == 0) // while (end >= start)
 	{
@@ -444,8 +462,8 @@ void algo8(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 void main()
 {
 	const char* m = "1001"; // 25
-	const char* n = "11"; // 3
-	Binumber num1(m, 4), num2(n, 2);
+	const char* n = "0"; // 3
+	Binumber num1(m, 4), num2(n, 1);
 
 	cout << "num1: "; num1.print();	cout << "dec value: " << num1.get_dec_val() << endl;
 	cout << "num2: "; num2.print();	cout << "dec value: " << num2.get_dec_val() << endl;
@@ -490,13 +508,25 @@ void main()
 	Binumber q_algo7_res;
 	Binumber r_algo7_res;
 
-	algo7(num1, num2, q_algo7_res, r_algo7_res);
-	cout << "algo 7: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
+	try
+	{
+		algo7(num1, num2, q_algo7_res, r_algo7_res);
+		cout << "algo 7: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
+	}
+	catch(string msg)
+	{
+		cout << msg << endl;
+	}
 
-
-	algo8(num1, num2, q_algo7_res, r_algo7_res);
-	cout << "algo 8: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
-
+	try
+	{
+		algo8(num1, num2, q_algo7_res, r_algo7_res);
+		cout << "algo 8: dec val: q = " << q_algo7_res.get_dec_val() << "      r= " << r_algo7_res.get_dec_val() << endl;
+	}
+	catch (string msg)
+	{
+		cout << msg << endl;
+	}
 	
 
 

@@ -165,7 +165,7 @@ void Binumber::optimize()
 {//delete zero from the end 
 	int i = this->arr.size() - 1;
 
-	while (i > 0 && arr[i] == '0')
+	while (i > 1 && arr[i] == '0')
 		i--;
 	i++;
 
