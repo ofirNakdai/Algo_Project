@@ -22,7 +22,7 @@ public:
 		this->arr.reserve(size);
 	}
 	Binumber(const char* arrin, int lengthin);
-	Binumber(string arrin, int lengthin);
+	Binumber(string arrin);
 	Binumber(const char* arrin);
 	Binumber(int size, char bit);
 	Binumber(Binumber& x); // copy c'tor
@@ -51,7 +51,7 @@ public:
 	Binumber dev2();
 
 
-private:
+private:		
 	void optimize();//delete zero from the end 
 
 };

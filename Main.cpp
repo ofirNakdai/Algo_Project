@@ -579,8 +579,8 @@ void main(int argc, char* argv[])
 			exit(0);
 		}
 
-		Binumber m(line2, line2.size()); //first m
-		Binumber n(line3, line3.size());// second n
+		Binumber m(line2); //first m
+		Binumber n(line3);// second n
 		run_algorithms_up_to_num(fout, m, n, algo_num);
 	}
 

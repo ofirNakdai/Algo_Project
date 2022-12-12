@@ -9,6 +9,17 @@
 using namespace std;
 
 
+static void remove_spaces_from_input(string& s)
+{
+	int last = s.size() - 1;
+
+	while (last >= 0 && (s[last] == ' '|| s[last] == '\n' || s[last] == '\t' || s[last] == '\v'))
+		--last;
+	s.resize(last + 1);
+}
+
+
+
 Binumber::Binumber(const char* arrin, int lengthin)
 {
 	arr.reserve(lengthin);
@@ -17,9 +28,10 @@ Binumber::Binumber(const char* arrin, int lengthin)
 
 	optimize();
 }
-Binumber::Binumber(string arrin, int lengthin)
+Binumber::Binumber(string arrin)
 {
-	arr.reserve(lengthin);
+	remove_spaces_from_input(arrin);
+	arr.reserve(arrin.size());
 	for (int i = lengthin - 1; i >= 0; i--) {
 		if (arrin[i] == '0' || arrin[i] == '1')
 			arr.push_back(arrin[i]);
