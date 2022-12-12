@@ -7,7 +7,7 @@
 
 string DIV_BY_0 = "ERROR! div by zero is not allowed";
 Binumber zero(1, '0');
-#define RECURSION_STOP 6
+#define RECURSION_STOP 2
 
 using namespace std;
 
@@ -123,6 +123,9 @@ Binumber algo3(Binumber& m, Binumber& n)
 	Binumber mCopy(m), nCopy(n);
 	Binumber tmp(n);
 
+	if (m.comp(zero) == 0 || n.comp(zero) == 0)
+		return zero;
+
 	mCopy.dec1();
 	//for (int i = 0; i < t - 1; i++)
 	while (mCopy.size() > 0)
@@ -147,7 +150,9 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 	}*/
 	if (m_size <= RECURSION_STOP)
 	{
-		return algo3(m, n);
+		Binumber litleM(m);
+		litleM.resize(m_size);
+		return algo3(litleM, n);
 	}
 
 	else
@@ -460,8 +465,8 @@ void algo8(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 
 	}
 
-	//if (algo4(m, q_out, m.size()).comp(n) != 0)// if(mk != n) means m does not devide n
-	//	q_out.dec1();
+	if (algo4(m, q_out, m.size()).comp(n) != 0)// if(mk != n) means m does not devide n
+		q_out.dec1();
 
 	res = algo4(m, q_out, m.size());//long multi
 	r_out = returnBiggerMinusSmallerBinumber(n, res);
@@ -470,36 +475,36 @@ void algo8(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 
 void run_algorithms_up_to_num(fstream& out_file, Binumber& m, Binumber& n, int num)
 {
-	if (num >= 1)
+	if (num == 1 || num == 9)
 	{
 		algo1(m, n).print_to_file(out_file);
 	}
-	if (num >= 2)
+	if (num == 2 || num == 9)
 	{
 		algo2(m, n).print_to_file(out_file);
 
 	}
-	if (num >= 3)
+	if (num == 3 || num == 9)
 	{
 		algo3(m, n).print_to_file(out_file);
 
 	}
-	if (num >= 4)
+	if (num == 4 || num == 9)
 	{
 		algo4(m, n, m.size()).print_to_file(out_file);
 
 	}
-	if (num >= 5)
+	if (num == 5 || num == 9)
 	{
 		algo5(m, n).print_to_file(out_file);
 
 	}
-	if (num >= 6)
+	if (num == 6 || num == 9)
 	{
 		algo6(m, n).print_to_file(out_file);
 
 	}
-	if (num >= 7)
+	if (num == 7 || num == 9)
 	{
 		Binumber q_algo7_res;
 		Binumber r_algo7_res;
@@ -515,7 +520,7 @@ void run_algorithms_up_to_num(fstream& out_file, Binumber& m, Binumber& n, int n
 			cout << msg << endl;
 		}
 	}
-	if (num >= 8)
+	if (num == 8 || num == 9)
 	{
 		Binumber q_algo8_res;
 		Binumber r_algo8_res;
@@ -553,7 +558,7 @@ void main(int argc, char* argv[])
 	getline(fin, line1);
 	algo_num = stoi(line1);
 
-	if (algo_num < 0 || algo_num > 8)
+	if (algo_num < 0 || algo_num > 9)
 	{
 		cout << " error: invalid algo num" << endl;
 	}
