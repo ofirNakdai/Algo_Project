@@ -31,6 +31,7 @@ Binumber::Binumber(const char* arrin, int lengthin)
 Binumber::Binumber(string arrin)
 {
 	remove_spaces_from_input(arrin);
+	int lengthin = arrin.size();
 	arr.reserve(arrin.size());
 	for (int i = lengthin - 1; i >= 0; i--) {
 		if (arrin[i] == '0' || arrin[i] == '1')
