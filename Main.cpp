@@ -7,12 +7,9 @@
 
 string DIV_BY_0 = "ERROR! div by zero is not allowed";
 Binumber zero(1, '0');
-#define RECURSION_STOP 2
+#define RECURSION_STOP 128
 
 using namespace std;
-
-
-
 
 Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 {
@@ -138,21 +135,22 @@ Binumber algo3(Binumber& m, Binumber& n)
 	return tmp;
 }
 
-Binumber algo4(Binumber& m, Binumber& n, int m_size)
+/*Binumber algo4_test(Binumber& m, Binumber& n, int m_size)
 {// m_size = m.size() -1		long multiplication
 	
-	/*if (m_size == 1)
+	if (m_size == 1)
 	{
 		if (m.get_cell_bit(0) == 1)
 			return Binumber(n);
 		else
 			return Binumber(1, '0');
-	}*/
-	if (m_size <= RECURSION_STOP)
+	}
+	/*if (m_size <= RECURSION_STOP)
 	{
-		Binumber litleM(m);
-		litleM.resize(m_size);
-		return algo3(litleM, n);
+		//Binumber litleM(m);
+		//litleM.resize(m_size);
+		//return algo3(litleM, n);
+		return zero;
 	}
 
 	else
@@ -173,6 +171,22 @@ Binumber algo4(Binumber& m, Binumber& n, int m_size)
 			return test;
 		}
 	}
+}*/
+Binumber algo4(Binumber& m, Binumber& n)
+{
+	int m_size = m.size();
+	Binumber tmp, sum(zero);
+	for (int i = 0; i < m_size; i++)
+	{
+		if (m.get_cell_bit(i) == 1)
+		{
+			tmp = n;
+			tmp.shift_right(i);
+			sum = algo2(tmp, sum);
+		}
+	}	
+
+	return sum;
 }
 
 Binumber algo5_rec(Binumber& m, Binumber& n)
@@ -180,7 +194,7 @@ Binumber algo5_rec(Binumber& m, Binumber& n)
 	int N;
 	if (m.size() <= RECURSION_STOP && n.size() <= RECURSION_STOP)
 	{
-		return algo4(m, n, m.size());
+		return algo4(m, n);
 	}
 	int adjustM = 0;
 	int adjustN = 0;
@@ -316,7 +330,7 @@ Binumber algo6_rec(Binumber& m, Binumber& n)
 	int N;
 	if (m.size() <= RECURSION_STOP && n.size() <= RECURSION_STOP)
 	{
-		return algo4(m, n, m.size());
+		return algo4(m, n);
 	}
 	int adjustM = 0;
 	int adjustN = 0;
@@ -418,10 +432,10 @@ void algo7(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 		throw DIV_BY_0;// division by 0
 	}
 
-	while (algo4(m, q, m.size()).comp(n) == -1) // while (mq < n)
+	while (algo4(m, q).comp(n) == -1) // while (mq < n)
 		q.add1();
 
-	if (algo4(m, q, m.size()).comp(n) == 0)// if(mk == n)
+	if (algo4(m, q).comp(n) == 0)// if(mk == n)
 		q_out = q;
 	else
 	{
@@ -429,7 +443,7 @@ void algo7(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 		q_out = q;
 	}
 
-	Binumber mq = algo4(m, q, m.size());
+	Binumber mq = algo4(m, q);
 	Binumber tmp = returnBiggerMinusSmallerBinumber(n, mq);
 	r_out = tmp;
 }
@@ -450,7 +464,7 @@ void algo8(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 		q_out = algo2(start, end); // long adding
 		q_out.dev2();
 
-		res = algo4(m, q_out, m.size()); // long multi
+		res = algo4(m, q_out); // long multi
 		if (res.comp(n) == 0)//res == n
 			break;
 		else if (res.comp(n) == 1 || res.comp(n) == 0)// if res >= n
@@ -465,10 +479,10 @@ void algo8(Binumber& n, Binumber& m, Binumber& q_out, Binumber& r_out)
 
 	}
 
-	if (algo4(m, q_out, m.size()).comp(n) != 0)// if(mk != n) means m does not devide n
+	if (algo4(m, q_out).comp(n) != 0)// if(mk != n) means m does not devide n
 		q_out.dec1();
 
-	res = algo4(m, q_out, m.size());//long multi
+	res = algo4(m, q_out);//long multi
 	r_out = returnBiggerMinusSmallerBinumber(n, res);
 }
 
@@ -491,7 +505,7 @@ void run_algorithms_up_to_num(fstream& out_file, Binumber& m, Binumber& n, int n
 	}
 	if (num == 4 || num == 9)
 	{
-		algo4(m, n, m.size()).print_to_file(out_file);
+		algo4(m, n).print_to_file(out_file);
 
 	}
 	if (num == 5 || num == 9)
@@ -540,7 +554,7 @@ void run_algorithms_up_to_num(fstream& out_file, Binumber& m, Binumber& n, int n
 }
 
 void main(int argc, char* argv[])
-{
+{ 
 	fstream fin, fout;
 	fin.open(argv[1], ios::in);
 	if (!fin)
@@ -583,15 +597,42 @@ void main(int argc, char* argv[])
 		Binumber n(line3);// second n
 		run_algorithms_up_to_num(fout, m, n, algo_num);
 	}
+	/*
 
+	time_t start, end;
+	string n_str, m_str;
+	int N = pow(2,11);
+	for (int i = 1; i <= N; i++)
+	{
 
+		if (i == 1 || i == 256)
+			m_str.push_back('1');
+		else
+			m_str.push_back('0');
 
+	}
+	Binumber m(m_str);
+	
+	Binumber n(m);
+	n = algo4(n, n, n.size()); // n = m^2
+	for (int i = 1; i <= 100; i++)// n = n + 100 ===>>> n = m^2 +100 ====>>>> sqrt(n)>m
+		n.add1();
 
+	Binumber q, r;
+	time(&start);
+	algo7(m, n, q, r);
+	time(&end);
+
+	double time_taken = double(end - start);
+	cout << "Time taken by program is : " << fixed	<< time_taken;	cout << " sec " << endl;
+	system("pause");
+
+	*/
 
 
 	//const char* m = "1001"; // 25
 	//const char* n = "0"; // 3
-	//Binumber num1(m, 4), num2(n, 1);
+	
 
 	//cout << "num1: "; num1.print();	cout << "dec value: " << num1.get_dec_val() << endl;
 	//cout << "num2: "; num2.print();	cout << "dec value: " << num2.get_dec_val() << endl;
