@@ -1,3 +1,3 @@
 ﻿  Main.cpp
-D:\Documents\MTA\אלגוריתמים\Algo_Project\Main.cpp(241,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
+D:\Documents\MTA\אלגוריתמים\Algo_Project\Main.cpp(557,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
   Algo_Project.vcxproj -> D:\Documents\MTA\אלגוריתמים\Algo_Project\Debug\Algo_Project.exe

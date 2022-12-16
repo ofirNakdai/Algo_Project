@@ -21,7 +21,6 @@ Binumber algo1(Binumber& m, Binumber& n)//n increases by m, m stays the same
 		nCopy.add1();
 		mCopy.dec1();
 	}
-
 	return nCopy;
 }
 
@@ -556,7 +555,7 @@ void run_algorithms_up_to_num(fstream& out_file, Binumber& m, Binumber& n, int n
 
 void main(int argc, char* argv[])
 { 
-	/*fstream fin, fout;
+	fstream fin, fout;
 	fin.open(argv[1], ios::in);
 	if (!fin)
 	{
@@ -597,38 +596,30 @@ void main(int argc, char* argv[])
 		Binumber m(line2); //first m
 		Binumber n(line3);// second n
 		run_algorithms_up_to_num(fout, m, n, algo_num);
-	}*/
+	}
 	
 
-	time_t start, end;
-	string n_str = "0110010001100100011001000110010001100100011001000110010001100101", m_str = "0000000000000000000000000000000010011111101111011000111000000000"; // N=2^5
-	int N = pow(2,13);
-	/*for (int i = 1; i <= N; i++)
-	{
-		if (i % 2 == 0)
-		{
-			m_str.push_back('1');
-			n_str.push_back('1');
-		}
-		else
-		{
-			m_str.push_back('1');
-			n_str.push_back('1');
-		}
+	//time_t start, end;
+	//double time_taken = 0;
+	//string n_str = "1011",
+	//	m_str = "1011";
+	//int pow = 2;
+	//while(time_taken <= 300)
+	//{
+	//	m_str = m_str + m_str;
+	//	n_str = n_str + n_str;
+	//	pow++;
+	//	Binumber m(m_str);
+	//	Binumber n(n_str);
+	//	time(&start);
+	//	algo6(m, n);
+	//	time(&end);
 
-	}*/
-	Binumber m(m_str);	
-	Binumber n(n_str);
+	//	time_taken = double(end - start);
+	//	cout <<"INPUT SIZE IS 2^"<<pow<< ". Time taken by program is : " << time_taken << " sec " << endl;
+	//}
+	//system("pause");
 
-	Binumber q, r;
-	time(&start);
-	algo8(n, m,q,r);
-	time(&end);
-
-	double time_taken = double(end - start);
-	cout << "Time taken by program is : " << fixed	<< time_taken;	cout << " sec " << endl;
-	cout << "q =  "; q.print(); cout << "r =  "; r.print();
-	system("pause");
 
 	
 
@@ -700,10 +691,6 @@ void main(int argc, char* argv[])
 	//	cout << msg << endl;
 	//}
 	//
-
-
-
-
 
 
 }

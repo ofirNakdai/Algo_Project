@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 static void remove_spaces_from_input(string& s)
 {
 	int last = s.size() - 1;
