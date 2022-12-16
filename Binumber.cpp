@@ -1,3 +1,4 @@
+//project by roman vitvitsky 324065184 and ofir nakdai 
 #define _CRT_SECURE_NO_WARNINGS
 #pragma once
 #include "Binumber.h"
